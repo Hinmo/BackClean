@@ -1,58 +1,73 @@
-🧱 Backend Template — Clean Architecture (Feature-Based)
+# 🧱 BackClean
 
-Template backend base organizado por módulos y siguiendo principios de Clean Architecture.
+**Backend template basado en Clean Architecture**, organizado por features y listo para producción.
 
-🎯 Este proyecto está diseñado para:
+Diseñado para proyectos que necesitan:
 
-✅ Servir como base reutilizable
+- ⚡ Escalabilidad real por módulos  
+- 🔄 Infraestructura intercambiable  
+- 🧩 Bajo acoplamiento entre capas  
+- 🚀 Preparado para entorno productivo  
 
-✅ Permitir escalar por features
+---
 
-✅ Mantener desacoplamiento entre capas
+## 🎯 Filosofía
 
-✅ No imponer base de datos ni herramientas específicas
+Este template no es un boilerplate más de Node.
 
-✅ Facilitar el reemplazo de infraestructura (HTTP, DB, etc.)
+Está pensado como **base arquitectónica reutilizable**, priorizando:
 
-🧰 Stack base
+- Separación estricta de capas
+- Regla de dependencias hacia adentro
+- Módulos autocontenidos por feature
+- Composition Root único
+- Independencia de frameworks y base de datos
 
-Node.js
+---
 
-Express (adapter HTTP)
+## 🧰 Stack Base
 
-TypeScript
+- Node.js  
+- Express (HTTP adapter)  
+- TypeScript  
 
-No incluye base de datos ni validación por defecto.
+❌ No incluye base de datos  
+❌ No incluye librería de validación  
+❌ No impone ORM  
 
-🏛 Arquitectura
+La infraestructura es reemplazable.
 
-El proyecto sigue separación por feature (módulo), manteniendo capas internas.
+---
 
-🔁 Regla de dependencias
+# 🏛 Arquitectura
 
-Las dependencias siempre apuntan hacia adentro:
+El proyecto sigue **Clean Architecture + organización por feature**.
 
+## 🔁 Regla de Dependencias
+
+```
 infrastructure → application → domain
-Reglas clave:
+```
 
-domain no conoce infraestructura
+### Reglas clave
 
-application no conoce Express
+- `domain` no conoce infraestructura  
+- `application` no conoce Express  
+- infraestructura implementa contratos del dominio  
+- `app.ts` es el único composition root  
+- `main.ts` solo arranca el servidor  
 
-Infraestructura implementa contratos del dominio
+---
 
-app.ts compone dependencias (composition root)
+# 📁 Estructura del Proyecto
 
-main.ts solo arranca el servidor
-
-📁 Estructura del proyecto
+```bash
 src/
-│
 ├── main.ts              # Arranque de la aplicación
 ├── app.ts               # Composition root (wiring)
 │
 ├── modules/
-│   └── test/            # Módulo de ejemplo mínimo
+│   └── test/
 │       ├── application/
 │       │   └── use-cases/
 │       │       └── HelloWorld.ts
@@ -62,7 +77,7 @@ src/
 │       │       ├── HelloController.ts
 │       │       └── testRoutes.ts
 │       │
-│       └── domain/      # (Opcional, según necesidad)
+│       └── domain/
 │
 ├── infrastructure/
 │   └── http/
@@ -79,273 +94,241 @@ src/
     │
     └── http/
         └── HttpStatus.ts
-🧪 Módulo de ejemplo
+```
 
-El módulo test incluye un endpoint:
+---
 
+# 🚀 Quick Start
+
+```bash
+git clone https://github.com/Hinmo/BackClean.git
+cd BackClean
+npm install
+npm run dev
+```
+
+Servidor por defecto:
+
+```
+http://localhost:3000
+```
+
+---
+
+# 🧪 Módulo de Ejemplo
+
+Incluye un módulo `test` con:
+
+```
 GET /test
+```
+
 Respuesta:
+
+```json
 {
   "message": "Hello World"
 }
+```
 
-Este módulo existe únicamente para demostrar la estructura.
+Este módulo existe solo como demostración estructural.  
 Puede eliminarse al iniciar un proyecto real.
 
-🏗 Cómo crear un nuevo módulo
-📂 Estructura recomendada
+---
+
+# 🏗 Cómo Crear un Nuevo Módulo
+
+## 📂 Estructura Recomendada
+
+```
 modules/<feature>/
   domain/
   application/
   infrastructure/
-1️⃣ Crear estructura
+```
 
-Ejemplo: módulo product
+---
 
-modules/product/
-  domain/
-  application/
-  infrastructure/
-2️⃣ Domain
+## 1️⃣ Domain
 
 Contiene:
 
-Entidades
+- Entidades  
+- Interfaces de repositorio  
+- Reglas puras  
 
-Interfaces de repositorio
-
-Reglas puras
-
-⚠ No debe importar nada de infraestructura.
+⚠ No debe importar infraestructura.
 
 Ejemplo:
 
+```
 domain/
   entities/
   repositories/
-3️⃣ Application
+```
+
+---
+
+## 2️⃣ Application
 
 Contiene:
 
-Casos de uso
-
-Orquestación de reglas
-
-Errores de aplicación
+- Casos de uso  
+- Orquestación  
+- Errores de aplicación  
 
 ⚠ No debe importar Express ni base de datos.
 
 Ejemplo:
 
+```
 application/
   use-cases/
   errors/
-4️⃣ Infrastructure
+```
+
+---
+
+## 3️⃣ Infrastructure
 
 Contiene:
 
-Implementaciones técnicas
-
-Controllers HTTP
-
-Routes
-
-Implementaciones de repositorios
+- Controllers HTTP  
+- Routes  
+- Implementaciones de repositorios  
+- Adaptadores externos  
 
 Ejemplo:
 
+```
 infrastructure/
   database/
   http/
-5️⃣ Registrar el módulo en app.ts
+```
 
-El único lugar donde se instancian dependencias es app.ts.
+---
 
+## 4️⃣ Registrar el módulo en `app.ts`
+
+Único lugar donde se instancian dependencias.
+
+```ts
 const productRepository = new MongoProductRepository(...)
 const createProduct = new CreateProduct(productRepository)
 const productController = new CreateProductController(createProduct)
 
 app.use(productRoutes(productController))
+```
 
 🚫 Nunca instanciar infraestructura dentro de casos de uso.
 
-⚠ Sistema de errores
-Jerarquía base
+---
+
+# ⚠ Sistema de Errores
+
+Jerarquía base:
+
+```
 BaseError
  ├─ ApplicationError
  └─ DomainError
-Reglas
+```
 
-Todo error de negocio debe extender BaseError
+Reglas:
 
-El middleware HTTP solo reconoce BaseError
+- Todo error de negocio debe extender `BaseError`
+- El middleware HTTP solo reconoce `BaseError`
+- No manejar errores específicos dentro de controllers
 
-No manejar errores específicos dentro de controllers
+Arquitectura limpia = manejo centralizado.
 
-▶ Ejecutar el proyecto
-📦 Instalar dependencias
+---
+
+# ▶ Ejecutar el Proyecto
+
+## 📦 Instalar dependencias
+
+```bash
 npm install
-🛠 Desarrollo
+```
+
+## 🛠 Desarrollo
+
+```bash
 npm run dev
-🏗 Build
+```
+
+## 🏗 Build
+
+```bash
 npm run build
-🚀 Producción
+```
+
+## 🚀 Producción
+
+```bash
 npm run start
+```
 
-Servidor por defecto:
+---
 
-http://localhost:3000
-📏 Reglas del template (no romper)
+# 📏 Reglas del Template (No Romper)
 
-❌ No importar Express en application
+❌ No importar Express en `application`  
+❌ No importar infraestructura en `domain`  
+❌ No instanciar repositorios dentro de casos de uso  
+❌ No acoplar middleware a errores específicos  
 
-❌ No importar infraestructura en domain
+✅ Cada módulo es autocontenido  
+✅ `main.ts` solo arranca  
+✅ `app.ts` es el único composition root  
 
-❌ No acoplar middleware a errores específicos
+---
 
-❌ No instanciar repositorios dentro de casos de uso
+# 🔮 Extensión Futura
 
-✅ Cada módulo debe ser autocontenido
+El template permite agregar sin romper arquitectura:
 
-✅ main.ts solo arranca
+- MongoDB / PostgreSQL / SQLite  
+- Fastify u otro framework HTTP  
+- Logger estructurado  
+- Sistema de validación  
+- Testing  
 
-✅ app.ts es el único composition root
+Sin modificar dominio ni casos de uso.
 
-🔮 Extensión futura
+---
 
-El template permite agregar:
+# 📌 ¿Cuándo usar este template?
 
-Base de datos (Mongo, PostgreSQL, SQLite, etc.)
+✔ APIs medianas o grandes  
+✔ Equipos que necesitan escalabilidad real  
+✔ Proyectos donde la arquitectura importa  
 
-Framework HTTP alternativo (Fastify, por ejemplo)
+❌ Microservicios triviales  
+❌ APIs rápidas tipo MVP sin intención de escalar  
 
-Logger estructurado
+---
 
-Sistema de validación
+# 🎯 Objetivo del Diseño
 
-Testing
+- Modularidad real  
+- Bajo acoplamiento  
+- Escalabilidad por feature  
+- Infraestructura reemplazable  
+- Base reutilizable en múltiples proyectos  
 
-Sin modificar el dominio ni los casos de uso.
+Este template es una base arquitectónica, no una solución cerrada.
 
-🎯 Objetivo del diseño
+---
 
-Modularidad real
+# 🤝 Contribuciones
 
-Bajo acoplamiento
+Pull requests son bienvenidos.  
+Si propones cambios, deben respetar la regla de dependencias.
 
-Escalabilidad por feature
+---
 
-Infraestructura reemplazable
+# 📄 Licencia
 
-Base reutilizable en múltiples proyectos
-
-Este template representa una base arquitectónica, no una solución cerrada.
-
-✅ Production Checklist
-1️⃣ Compilación limpia
-npm run build
-
-Debe:
-
-Generar dist/
-
-No tener errores TypeScript
-
-Mantener estructura correcta
-
-✔ Obligatorio antes de cualquier deploy.
-
-2️⃣ Arranque desde código compilado
-npm run start
-
-Verificar:
-
-El servidor levanta correctamente
-
-Rutas funcionan
-
-No hay errores de path
-
-No dependes de tsx
-
-✔ Simulación real de producción.
-
-3️⃣ Variables de entorno
-
-Confirmar que:
-
-process.env.PORT funciona
-
-process.env.NODE_ENV funciona
-
-No dependes obligatoriamente de .env
-
-Ejemplo recomendado en main.ts:
-
-const port = process.env.PORT || 3000
-
-✔ No hardcodear puertos.
-
-4️⃣ .gitignore correcto
-
-Debe contener:
-
-node_modules/
-.env
-dist/
-
-✔ Nunca subir:
-
-node_modules
-
-archivos sensibles
-
-código compilado
-
-5️⃣ package.json limpio
-
-Verificar:
-
-typescript en devDependencies
-
-No dependencias innecesarias
-
-"private": true
-
-Scripts correctos: dev, build, start
-
-✔ Sin basura técnica.
-
-6️⃣ Manejo centralizado de errores
-
-Confirmar:
-
-Middleware global de errores activo
-
-No hay try/catch innecesarios en controllers
-
-Errores del dominio no dependen de Express
-
-✔ Arquitectura intacta.
-
-7️⃣ Separación real de capas
-
-Confirmar:
-
-domain no importa infraestructura
-
-application no importa Express
-
-app.ts es el único composition root
-
-✔ No romper Clean Architecture.
-
-8️⃣ Sin dependencias de desarrollo en producción
-
-En un entorno real se ejecutaría:
-
-npm install --production
-npm run build
-npm run start
-
-Si eso funciona, está listo para producción. 🚀
+MIT

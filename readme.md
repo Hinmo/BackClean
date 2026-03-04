@@ -348,4 +348,4 @@ npm install --production
 npm run build
 npm run start
 
-Si eso funciona, está listo para producción 🚀
+Si eso funciona, está listo para producción. 🚀

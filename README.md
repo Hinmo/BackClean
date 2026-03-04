@@ -1,6 +1,6 @@
 # 🧱 BackClean
 
-> Backend template basado en Clean Architecture, organizado por features y diseñado para producción.
+> Backend template based on Clean Architecture, feature-based and production-ready.
 
 <p align="left">
   <img src="https://img.shields.io/badge/node-%3E%3D18-green" />
@@ -11,74 +11,71 @@
 
 ---
 
-BackClean es una base arquitectónica para construir APIs escalables en Node.js sin acoplar dominio a frameworks ni a infraestructura.
+BackClean is an architectural base for building scalable Node.js APIs without coupling domain logic to frameworks or infrastructure.
 
-Diseñado para proyectos que necesitan:
+Designed for projects that require:
 
-- ⚡ Escalabilidad real por módulos  
-- 🔄 Infraestructura intercambiable  
-- 🧩 Bajo acoplamiento  
-- 🏗 Separación estricta de capas  
-- 🚀 Preparado para producción 
-
----
-## 🧩 Arquitectura en una frase
-
-Dominio independiente, casos de uso puros y composición de infraestructura en un único punto.
-
-## 🎯 Filosofía
-
-Este template no es un boilerplate más de Node.
-
-Está pensado como **base arquitectónica reutilizable**, priorizando:
-
-- Separación estricta de capas
-- Regla de dependencias hacia adentro
-- Módulos autocontenidos por feature
-- Composition Root único
-- Independencia de frameworks y base de datos
+- ⚡ True feature-based modularity  
+- 🔄 Replaceable infrastructure  
+- 🧩 Low coupling  
+- 🏗 Strict layer separation  
+- 🚀 Production-ready  
 
 ---
 
-## 🧰 Stack Base
+## 🎯 Philosophy
+
+This is not just another Node boilerplate.
+
+BackClean provides a **reusable architectural foundation**, prioritizing:
+
+- Strict separation of layers  
+- Dependency rule pointing inwards  
+- Self-contained feature modules  
+- Single composition root  
+- Framework and database independence  
+
+---
+
+## 🧰 Base Stack
 
 - Node.js  
 - Express (HTTP adapter)  
 - TypeScript  
 
-❌ No incluye base de datos  
-❌ No incluye librería de validación  
-❌ No impone ORM  
+❌ No database included  
+❌ No validation library included  
+❌ No enforced ORM  
 
-La infraestructura es reemplazable.
+The infrastructure is fully replaceable.
 
 ---
 
-# 🏛 Arquitectura
+# 🏛 Architecture
 
-El proyecto sigue **Clean Architecture + organización por feature**.
+The project follows **Clean Architecture + feature-based organization**.
 
-## 🔁 Regla de Dependencias
+## 🔁 Dependency Rule
 
 ```
 infrastructure → application → domain
 ```
 
-### Reglas clave
+### Key Rules
 
-- `domain` no conoce infraestructura  
-- `application` no conoce Express  
-- infraestructura implementa contratos del dominio  
-- `app.ts` es el único composition root  
-- `main.ts` solo arranca el servidor  
+- `domain` does not know infrastructure  
+- `application` does not know Express  
+- Infrastructure implements domain contracts  
+- `app.ts` is the only composition root  
+- `main.ts` only boots the server  
 
 ---
 
-# 📁 Estructura del Proyecto
+# 📁 Project Structure
 
 ```bash
 src/
-├── main.ts              # Arranque de la aplicación
+├── main.ts              # Application entry
 ├── app.ts               # Composition root (wiring)
 │
 ├── modules/
@@ -122,7 +119,7 @@ npm install
 npm run dev
 ```
 
-Servidor por defecto:
+Default server:
 
 ```
 http://localhost:3000
@@ -130,15 +127,15 @@ http://localhost:3000
 
 ---
 
-# 🧪 Módulo de Ejemplo
+# 🧪 Example Module
 
-Incluye un módulo `test` con:
+Includes a `test` module with:
 
 ```
 GET /test
 ```
 
-Respuesta:
+Response:
 
 ```json
 {
@@ -146,14 +143,13 @@ Respuesta:
 }
 ```
 
-Este módulo existe solo como demostración estructural.  
-Puede eliminarse al iniciar un proyecto real.
+This module exists purely to demonstrate structure and can be removed for real projects.
 
 ---
 
-# 🏗 Cómo Crear un Nuevo Módulo
+# 🏗 Creating a New Module
 
-## 📂 Estructura Recomendada
+## 📂 Recommended Structure
 
 ```
 modules/<feature>/
@@ -166,15 +162,15 @@ modules/<feature>/
 
 ## 1️⃣ Domain
 
-Contiene:
+Contains:
 
-- Entidades  
-- Interfaces de repositorio  
-- Reglas puras  
+- Entities  
+- Repository interfaces  
+- Pure business rules  
 
-⚠ No debe importar infraestructura.
+⚠ Must not import infrastructure.
 
-Ejemplo:
+Example:
 
 ```
 domain/
@@ -186,15 +182,15 @@ domain/
 
 ## 2️⃣ Application
 
-Contiene:
+Contains:
 
-- Casos de uso  
-- Orquestación  
-- Errores de aplicación  
+- Use cases  
+- Orchestration  
+- Application errors  
 
-⚠ No debe importar Express ni base de datos.
+⚠ Must not import Express or database.
 
-Ejemplo:
+Example:
 
 ```
 application/
@@ -206,14 +202,14 @@ application/
 
 ## 3️⃣ Infrastructure
 
-Contiene:
+Contains:
 
-- Controllers HTTP  
+- HTTP controllers  
 - Routes  
-- Implementaciones de repositorios  
-- Adaptadores externos  
+- Repository implementations  
+- External adapters  
 
-Ejemplo:
+Example:
 
 ```
 infrastructure/
@@ -223,9 +219,9 @@ infrastructure/
 
 ---
 
-## 4️⃣ Registrar el módulo en `app.ts`
+## 4️⃣ Register Module in `app.ts`
 
-Único lugar donde se instancian dependencias.
+Only place where dependencies are instantiated:
 
 ```ts
 const productRepository = new MongoProductRepository(...)
@@ -235,13 +231,13 @@ const productController = new CreateProductController(createProduct)
 app.use(productRoutes(productController))
 ```
 
-🚫 Nunca instanciar infraestructura dentro de casos de uso.
+🚫 Never instantiate infrastructure inside use cases.
 
 ---
 
-# ⚠ Sistema de Errores
+# ⚠ Error Handling System
 
-Jerarquía base:
+Base hierarchy:
 
 ```
 BaseError
@@ -249,25 +245,25 @@ BaseError
  └─ DomainError
 ```
 
-Reglas:
+Rules:
 
-- Todo error de negocio debe extender `BaseError`
-- El middleware HTTP solo reconoce `BaseError`
-- No manejar errores específicos dentro de controllers
+- All business errors must extend `BaseError`  
+- HTTP middleware only recognizes `BaseError`  
+- Do not handle specific errors inside controllers  
 
-Arquitectura limpia = manejo centralizado.
+Centralized error handling preserves clean architecture.
 
 ---
 
-# ▶ Ejecutar el Proyecto
+# ▶ Running the Project
 
-## 📦 Instalar dependencias
+## 📦 Install dependencies
 
 ```bash
 npm install
 ```
 
-## 🛠 Desarrollo
+## 🛠 Development
 
 ```bash
 npm run dev
@@ -279,7 +275,7 @@ npm run dev
 npm run build
 ```
 
-## 🚀 Producción
+## 🚀 Production
 
 ```bash
 npm run start
@@ -287,63 +283,63 @@ npm run start
 
 ---
 
-# 📏 Reglas del Template (No Romper)
+# 📏 Template Rules (Do Not Break)
 
-❌ No importar Express en `application`  
-❌ No importar infraestructura en `domain`  
-❌ No instanciar repositorios dentro de casos de uso  
-❌ No acoplar middleware a errores específicos  
+❌ Do not import Express in `application`  
+❌ Do not import infrastructure in `domain`  
+❌ Do not instantiate repositories inside use cases  
+❌ Do not couple middleware to specific errors  
 
-✅ Cada módulo es autocontenido  
-✅ `main.ts` solo arranca  
-✅ `app.ts` es el único composition root  
+✅ Each module is self-contained  
+✅ `main.ts` only boots the server  
+✅ `app.ts` is the only composition root  
 
 ---
 
-# 🔮 Extensión Futura
+# 🔮 Future Extensions
 
-El template permite agregar sin romper arquitectura:
+Template allows adding without breaking architecture:
 
 - MongoDB / PostgreSQL / SQLite  
-- Fastify u otro framework HTTP  
-- Logger estructurado  
-- Sistema de validación  
+- Fastify or other HTTP frameworks  
+- Structured logging  
+- Validation system  
 - Testing  
 
-Sin modificar dominio ni casos de uso.
+No modification of domain or use cases required.
 
 ---
 
-# 📌 ¿Cuándo usar este template?
+# 📌 When to Use This Template
 
-✔ APIs medianas o grandes  
-✔ Equipos que necesitan escalabilidad real  
-✔ Proyectos donde la arquitectura importa  
+✔ Medium or large APIs  
+✔ Teams requiring real scalability  
+✔ Projects where architecture matters  
 
-❌ Microservicios triviales  
-❌ APIs rápidas tipo MVP sin intención de escalar  
-
----
-
-# 🎯 Objetivo del Diseño
-
-- Modularidad real  
-- Bajo acoplamiento  
-- Escalabilidad por feature  
-- Infraestructura reemplazable  
-- Base reutilizable en múltiples proyectos  
-
-Este template es una base arquitectónica, no una solución cerrada.
+❌ Tiny microservices  
+❌ Quick MVP APIs without scaling needs  
 
 ---
 
-# 🤝 Contribuciones
+# 🎯 Design Goal
 
-Pull requests son bienvenidos.  
-Si propones cambios, deben respetar la regla de dependencias.
+- Real modularity  
+- Low coupling  
+- Feature-based scalability  
+- Replaceable infrastructure  
+- Reusable base for multiple projects  
+
+This template is an **architectural foundation**, not a closed solution.
 
 ---
 
-# 📄 Licencia
+# 🤝 Contributions
+
+Pull requests are welcome.  
+Proposed changes must respect the dependency rule.
+
+---
+
+# 📄 License
 
 MIT

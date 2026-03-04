@@ -1,15 +1,30 @@
 # 🧱 BackClean
 
-**Backend template basado en Clean Architecture**, organizado por features y listo para producción.
+> Backend template basado en Clean Architecture, organizado por features y diseñado para producción.
+
+<p align="left">
+  <img src="https://img.shields.io/badge/node-%3E%3D18-green" />
+  <img src="https://img.shields.io/badge/typescript-%5E5-blue" />
+  <img src="https://img.shields.io/badge/architecture-clean-orange" />
+  <img src="https://img.shields.io/badge/license-MIT-lightgrey" />
+</p>
+
+---
+
+BackClean es una base arquitectónica para construir APIs escalables en Node.js sin acoplar dominio a frameworks ni a infraestructura.
 
 Diseñado para proyectos que necesitan:
 
 - ⚡ Escalabilidad real por módulos  
 - 🔄 Infraestructura intercambiable  
-- 🧩 Bajo acoplamiento entre capas  
-- 🚀 Preparado para entorno productivo  
+- 🧩 Bajo acoplamiento  
+- 🏗 Separación estricta de capas  
+- 🚀 Preparado para producción 
 
 ---
+## 🧩 Arquitectura en una frase
+
+Dominio independiente, casos de uso puros y composición de infraestructura en un único punto.
 
 ## 🎯 Filosofía
 

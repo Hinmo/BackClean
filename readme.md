@@ -1,20 +1,20 @@
-Backend Template — Clean Architecture (Feature-Based)
+🧱 Backend Template — Clean Architecture (Feature-Based)
 
 Template backend base organizado por módulos y siguiendo principios de Clean Architecture.
 
-Este proyecto está diseñado para:
+🎯 Este proyecto está diseñado para:
 
-Servir como base reutilizable.
+✅ Servir como base reutilizable
 
-Permitir escalar por features.
+✅ Permitir escalar por features
 
-Mantener desacoplamiento entre capas.
+✅ Mantener desacoplamiento entre capas
 
-No imponer base de datos ni herramientas específicas.
+✅ No imponer base de datos ni herramientas específicas
 
-Facilitar el reemplazo de infraestructura (HTTP, DB, etc.).
+✅ Facilitar el reemplazo de infraestructura (HTTP, DB, etc.)
 
-Stack base:
+🧰 Stack base
 
 Node.js
 
@@ -24,27 +24,28 @@ TypeScript
 
 No incluye base de datos ni validación por defecto.
 
-Arquitectura
+🏛 Arquitectura
 
 El proyecto sigue separación por feature (módulo), manteniendo capas internas.
 
-Regla de dependencias
+🔁 Regla de dependencias
 
 Las dependencias siempre apuntan hacia adentro:
 
 infrastructure → application → domain
+Reglas clave:
 
-domain no conoce infraestructura.
+domain no conoce infraestructura
 
-application no conoce Express.
+application no conoce Express
 
-Infraestructura implementa contratos del dominio.
+Infraestructura implementa contratos del dominio
 
-app.ts compone dependencias (composition root).
+app.ts compone dependencias (composition root)
 
-main.ts solo arranca el servidor.
+main.ts solo arranca el servidor
 
-Estructura del proyecto
+📁 Estructura del proyecto
 src/
 │
 ├── main.ts              # Arranque de la aplicación
@@ -78,15 +79,12 @@ src/
     │
     └── http/
         └── HttpStatus.ts
-
-Módulo de ejemplo
+🧪 Módulo de ejemplo
 
 El módulo test incluye un endpoint:
 
 GET /test
-
 Respuesta:
-
 {
   "message": "Hello World"
 }
@@ -94,15 +92,12 @@ Respuesta:
 Este módulo existe únicamente para demostrar la estructura.
 Puede eliminarse al iniciar un proyecto real.
 
-Cómo crear un nuevo módulo
-
-La estructura recomendada es:
-
+🏗 Cómo crear un nuevo módulo
+📂 Estructura recomendada
 modules/<feature>/
   domain/
   application/
   infrastructure/
-
 1️⃣ Crear estructura
 
 Ejemplo: módulo product
@@ -111,7 +106,6 @@ modules/product/
   domain/
   application/
   infrastructure/
-
 2️⃣ Domain
 
 Contiene:
@@ -122,14 +116,13 @@ Interfaces de repositorio
 
 Reglas puras
 
-No debe importar nada de infraestructura.
+⚠ No debe importar nada de infraestructura.
 
 Ejemplo:
 
 domain/
   entities/
   repositories/
-
 3️⃣ Application
 
 Contiene:
@@ -140,14 +133,13 @@ Orquestación de reglas
 
 Errores de aplicación
 
-No debe importar Express ni base de datos.
+⚠ No debe importar Express ni base de datos.
 
 Ejemplo:
 
 application/
   use-cases/
   errors/
-
 4️⃣ Infrastructure
 
 Contiene:
@@ -165,12 +157,9 @@ Ejemplo:
 infrastructure/
   database/
   http/
-
 5️⃣ Registrar el módulo en app.ts
 
 El único lugar donde se instancian dependencias es app.ts.
-
-Ejemplo:
 
 const productRepository = new MongoProductRepository(...)
 const createProduct = new CreateProduct(productRepository)
@@ -178,63 +167,51 @@ const productController = new CreateProductController(createProduct)
 
 app.use(productRoutes(productController))
 
-Nunca instanciar infraestructura dentro de casos de uso.
+🚫 Nunca instanciar infraestructura dentro de casos de uso.
 
-Sistema de errores
-
-Jerarquía base:
-
+⚠ Sistema de errores
+Jerarquía base
 BaseError
  ├─ ApplicationError
  └─ DomainError
+Reglas
 
-Reglas:
+Todo error de negocio debe extender BaseError
 
-Todo error de negocio debe extender BaseError.
+El middleware HTTP solo reconoce BaseError
 
-El middleware HTTP solo reconoce BaseError.
+No manejar errores específicos dentro de controllers
 
-No manejar errores específicos dentro de controllers.
-
-Ejecutar el proyecto
-
-Instalar dependencias:
-
+▶ Ejecutar el proyecto
+📦 Instalar dependencias
 npm install
-
-Desarrollo:
-
+🛠 Desarrollo
 npm run dev
-
-Build:
-
+🏗 Build
 npm run build
-
-Producción:
-
+🚀 Producción
 npm run start
 
 Servidor por defecto:
 
 http://localhost:3000
+📏 Reglas del template (no romper)
 
-Reglas del template (no romper)
+❌ No importar Express en application
 
-No importar Express en application.
+❌ No importar infraestructura en domain
 
-No importar infraestructura en domain.
+❌ No acoplar middleware a errores específicos
 
-No acoplar middleware a errores específicos.
+❌ No instanciar repositorios dentro de casos de uso
 
-No instanciar repositorios dentro de casos de uso.
+✅ Cada módulo debe ser autocontenido
 
-Cada módulo debe ser autocontenido.
+✅ main.ts solo arranca
 
-main.ts solo arranca.
+✅ app.ts es el único composition root
 
-app.ts es el único composition root.
-
-Extensión futura
+🔮 Extensión futura
 
 El template permite agregar:
 
@@ -250,22 +227,21 @@ Testing
 
 Sin modificar el dominio ni los casos de uso.
 
-Objetivo del diseño
+🎯 Objetivo del diseño
 
-Modularidad real.
+Modularidad real
 
-Bajo acoplamiento.
+Bajo acoplamiento
 
-Escalabilidad por feature.
+Escalabilidad por feature
 
-Infraestructura reemplazable.
+Infraestructura reemplazable
 
-Base reutilizable en múltiples proyectos.
+Base reutilizable en múltiples proyectos
 
 Este template representa una base arquitectónica, no una solución cerrada.
 
-## Production Checklist
-
+✅ Production Checklist
 1️⃣ Compilación limpia
 npm run build
 
@@ -372,4 +348,4 @@ npm install --production
 npm run build
 npm run start
 
-Si eso funciona, estás listo para producción.
+Si eso funciona, estás listo para producción 🚀
